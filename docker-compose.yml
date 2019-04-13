@@ -1,0 +1,31 @@
+version: '2'
+services:
+  php-apache-dev:
+    hostname: oc-test.loc
+    image: 'webdevops/php-apache-dev:5.6'
+    links:
+      - 'mysql:db'
+    volumes:
+      - '.\php:/app'
+    ports:
+      - '80:80'
+    depends_on:
+      - mysql
+    environment:
+      - PHP_DISPLAY_ERRORS=1
+  mysql:
+    image: 'mysql:5.7'
+    environment:
+      - MYSQL_ROOT_PASSWORD=demo1234
+      - MYSQL_DATABASE=teststore
+    volumes:
+      - '.\mysql:/var/lib/mysql'
+    ports:
+      - '33061:3306'
+  adminer:
+    image: adminer
+    links:
+      - 'mysql:db'
+    restart: always
+    ports:
+      - '8080:8080'
